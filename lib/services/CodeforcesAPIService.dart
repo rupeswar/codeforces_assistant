@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:codeforces_assistant/models/RatingChange.dart';
 import 'package:codeforces_assistant/models/User.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -13,11 +14,18 @@ class CodeforcesAPIService {
     return User.fromJson(jsonDecode(response.body));
   }
 
-  static Future<Response> getContestHistory({@required String userId}) {
-    return get(Uri.parse('${baseURL}user.rating?handle=$userId'));
+  static Future<List<RatingChange>> getContestHistory(
+      {@required String userId}) async {
+    Response response =
+        await get(Uri.parse('${baseURL}user.rating?handle=$userId'));
+    return RatingChange.listFromJson(jsonDecode(response.body));
   }
 
   static Future<Response> getAllContests() {
     return get(Uri.parse('${baseURL}contest.list'));
+  }
+
+  static String getContestURL(int cid) {
+    return 'https://codeforces.com/contest/$cid';
   }
 }

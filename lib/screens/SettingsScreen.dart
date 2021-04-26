@@ -30,7 +30,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomButton(
-                text: 'Link Phone Number',
+                child: Text(
+                  'Link Phone Number',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                  ),
+                ),
                 onPressed: () {
                   if (currentUser.phoneNumber == null)
                     Navigator.of(context).push(
@@ -44,7 +51,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               SizedBox(height: 20),
               CustomButton(
-                text: 'Link Email',
+                child: Text(
+                  'Link Email',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                  ),
+                ),
                 onPressed: () {
                   if (currentUser.email == null)
                     Navigator.of(context).push(

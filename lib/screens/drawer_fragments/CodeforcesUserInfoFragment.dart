@@ -1,6 +1,10 @@
 import 'package:codeforces_assistant/models/User.dart';
+import 'package:codeforces_assistant/screens/drawer_fragments/CodeforcesUserContestHistoryFragment.dart';
 import 'package:codeforces_assistant/services/CodeforcesAPIService.dart';
+import 'package:codeforces_assistant/utils/SizeUtil.dart';
 import 'package:codeforces_assistant/utils/dialogs.dart';
+import 'package:codeforces_assistant/widgets/custom_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CodeforcesUserInfoFragment extends StatefulWidget {
@@ -14,12 +18,14 @@ class _CodeforcesUserInfoFragmentState
   bool _dataIsReady = false;
   User user;
   double widthPiece, heightPiece;
+  SizeUtil size;
   String handle = 'tourist';
 
   @override
   Widget build(BuildContext context) {
-    widthPiece = MediaQuery.of(context).size.width / 10;
-    heightPiece = MediaQuery.of(context).size.height / 10;
+    widthPiece = MediaQuery.of(context).size.width;
+    heightPiece = MediaQuery.of(context).size.height;
+    size = SizeUtil(heightPiece, widthPiece);
 
     if (!_dataIsReady) getUser(handle);
 
@@ -35,25 +41,28 @@ class _CodeforcesUserInfoFragmentState
         children: [
           Image.network(
             user.imageURL,
-            height: 2 * heightPiece,
+            height: size.heightPercent(20),
             fit: BoxFit.fitHeight,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 0.5 * heightPiece),
+            padding: EdgeInsets.symmetric(vertical: size.heightPercent(5)),
             child: Text(
               user.handle,
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: size.size(60),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           SizedBox(
-            height: 2 * heightPiece,
+            height: size.heightPercent(20),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: widthPiece),
+              padding: EdgeInsets.symmetric(horizontal: size.widthPercent(10)),
               child: Card(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: widthPiece,
-                    vertical: 20.0,
+                    horizontal: size.widthPercent(2.5),
+                    vertical: size.size(30),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,14 +73,16 @@ class _CodeforcesUserInfoFragmentState
                             child: Text(
                               'Current Rating',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: size.size(30),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             flex: 1,
                           ),
                           Expanded(
                             child: Text(
                               '${user.rating}',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: size.size(30)),
                             ),
                             flex: 1,
                           ),
@@ -83,14 +94,16 @@ class _CodeforcesUserInfoFragmentState
                             child: Text(
                               'Max Rating',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: size.size(30),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             flex: 1,
                           ),
                           Expanded(
                             child: Text(
                               '${user.maxRating}',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: size.size(30)),
                             ),
                             flex: 1,
                           ),
@@ -102,14 +115,16 @@ class _CodeforcesUserInfoFragmentState
                             child: Text(
                               'Current Rank',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: size.size(30),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             flex: 1,
                           ),
                           Expanded(
                             child: Text(
                               '${user.rank}',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: size.size(30)),
                             ),
                             flex: 1,
                           ),
@@ -121,14 +136,16 @@ class _CodeforcesUserInfoFragmentState
                             child: Text(
                               'Max Rank',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: size.size(30),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             flex: 1,
                           ),
                           Expanded(
                             child: Text(
                               '${user.maxRank}',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: size.size(30)),
                             ),
                             flex: 1,
                           ),
@@ -138,6 +155,36 @@ class _CodeforcesUserInfoFragmentState
                   ),
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: size.heightPercent(5),
+              horizontal: size.widthPercent(5),
+            ),
+            child: CustomButton(
+              child: Padding(
+                padding: EdgeInsets.all(size.size(20)),
+                child: Text(
+                  'Contest History',
+                  style: TextStyle(
+                    fontSize: size.size(30),
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              autoSize: true,
+              onPressed: () async {
+                var ratingChanges =
+                    await CodeforcesAPIService.getContestHistory(
+                        userId: handle);
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => CodeforcesUserContestHistoryFragment(
+                    ratingChanges: ratingChanges,
+                  ),
+                ));
+              },
             ),
           ),
         ],

@@ -1,9 +1,12 @@
 import 'package:codeforces_assistant/services/AuthenticationService.dart';
+import 'package:codeforces_assistant/utils/SizeUtil.dart';
+import 'package:codeforces_assistant/utils/UserDataNotifier.dart';
 import 'package:codeforces_assistant/widgets/custom_button.dart';
 import 'package:codeforces_assistant/widgets/custom_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PhoneSignInPhoneNumberScreen extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -14,7 +17,9 @@ class PhoneSignInPhoneNumberScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var widthPiece = MediaQuery.of(context).size.width / 10;
+    var widthPiece = MediaQuery.of(context).size.width;
+    var heightPiece = MediaQuery.of(context).size.height;
+    var size = SizeUtil(heightPiece, widthPiece);
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +29,7 @@ class PhoneSignInPhoneNumberScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: widthPiece,
+          horizontal: size.widthPercent(10),
         ),
         child: Center(
           child: Form(
@@ -35,6 +40,10 @@ class PhoneSignInPhoneNumberScreen extends StatelessWidget {
                 CustomTextField(
                   maxLength: 10,
                   hintText: 'Enter 10 digit mobile no.',
+                  style: TextStyle(
+                    fontSize: size.size(30),
+                    height: 1.5,
+                  ),
                   inputType: TextInputType.phone,
                   onSaved: (value) => phoneNo = '+91$value',
                   validator: (value) {
@@ -46,9 +55,16 @@ class PhoneSignInPhoneNumberScreen extends StatelessWidget {
                     }
                   },
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: size.size(20)),
                 CustomButton(
-                  text: 'Send OTP',
+                  child: Text(
+                    'Send OTP',
+                    style: TextStyle(
+                      fontSize: size.size(30),
+                      fontWeight: FontWeight.normal,
+                      color: Colors.white,
+                    ),
+                  ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       if (isWeb)
@@ -88,7 +104,10 @@ class PhoneSignInOTPScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var widthPiece = MediaQuery.of(context).size.width / 10;
+    var widthPiece = MediaQuery.of(context).size.width;
+    var heightPiece = MediaQuery.of(context).size.height;
+    var size = SizeUtil(heightPiece, widthPiece);
+    final userDataNotifier = Provider.of<UserDataNotifier>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +117,7 @@ class PhoneSignInOTPScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: widthPiece,
+          horizontal: size.widthPercent(10),
         ),
         child: Center(
           child: Form(
@@ -108,21 +127,25 @@ class PhoneSignInOTPScreen extends StatelessWidget {
               children: [
                 Text(
                   'Verify the OTP sent to this number',
-                  style: TextStyle(fontSize: 22),
+                  style: TextStyle(fontSize: size.size(30)),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: size.size(10)),
                 Text(
                   '$phoneNo',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 22,
+                    fontSize: size.size(30),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: size.size(20)),
                 Text('Enter OTP'),
-                SizedBox(height: 20),
+                SizedBox(height: size.size(20)),
                 CustomTextField(
                   hintText: 'Your OTP here',
+                  style: TextStyle(
+                    fontSize: size.size(30),
+                    height: 1.5,
+                  ),
                   maxLength: 6,
                   inputType: TextInputType.number,
                   onSaved: (otp) => _otp = otp,
@@ -135,13 +158,22 @@ class PhoneSignInOTPScreen extends StatelessWidget {
                     }
                   },
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: size.size(20)),
                 CustomButton(
-                  text: 'Proceed',
+                  child: Text(
+                    'Proceed',
+                    style: TextStyle(
+                      fontSize: size.size(30),
+                      fontWeight: FontWeight.normal,
+                      color: Colors.white,
+                    ),
+                  ),
                   onPressed: () async {
                     if (_formKey.currentState.validate())
                       await authenticationService.signInWithOTP(context,
                           smsOTP: _otp);
+
+                    userDataNotifier.notifyChange();
                   },
                 )
               ],

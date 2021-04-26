@@ -5,9 +5,9 @@ class CustomButton extends StatefulWidget {
   final Color buttonColor;
   final void Function() onPressed;
   final bool autoSize;
-  final String text;
+  final Widget child;
   const CustomButton(
-      {@required this.text,
+      {@required this.child,
       this.buttonColor,
       this.onPressed,
       this.textColor,
@@ -45,11 +45,12 @@ class _CustomButtonState extends State<CustomButton> {
                   _loading = false;
                 });
               },
-              child: Text(widget.text,
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.normal,
-                      color: widget.textColor ?? Colors.white)),
+              child: widget.child,
+              // Text(widget.text,
+              //     style: TextStyle(
+              //         fontSize: widget.fontSize,
+              //         fontWeight: FontWeight.normal,
+              //         color: widget.textColor ?? Colors.white)),
             ),
           );
   }

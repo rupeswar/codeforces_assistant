@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:codeforces_assistant/utils/Dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationService {
@@ -7,6 +10,7 @@ class AuthenticationService {
   String errorMessage = '';
   // For firebase auth
   final auth = FirebaseAuth.instance;
+  bool isWeb = kIsWeb;
 
   Future<void> nativeVerifyPhone(BuildContext context, String phoneNo) async {
     final PhoneVerificationCompleted verificationCompleted =
@@ -50,6 +54,11 @@ class AuthenticationService {
         smsCode: smsOTP,
       );
       await auth.signInWithCredential(credential);
+
+      if (isWeb) {
+        var captcha = querySelector('#__ff-recaptcha-container');
+        if (captcha != null) captcha.hidden = true;
+      }
 
       // Todo After Verification Complete
       Navigator.of(context).pop();

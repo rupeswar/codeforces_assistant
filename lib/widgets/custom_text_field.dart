@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType inputType;
   final TextEditingController controller;
   final bool obscureText;
+  final TextStyle style;
   const CustomTextField(
       {Key key,
       this.multiLines = false,
@@ -27,7 +28,8 @@ class CustomTextField extends StatelessWidget {
       this.onChanged,
       this.maxLines,
       this.controller,
-      this.obscureText})
+      this.obscureText,
+      this.style})
       : super(key: key);
 
   @override
@@ -45,7 +47,7 @@ class CustomTextField extends StatelessWidget {
         onSaved: onSaved,
         onChanged: onChanged,
         validator: validator,
-        style: TextStyle(height: 1.5),
+        style: style ?? TextStyle(height: 1.5),
         maxLength: null,
         keyboardType: inputType ?? null,
         maxLines: (multiLines)
