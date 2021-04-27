@@ -1,5 +1,5 @@
 import 'package:codeforces_assistant/models/User.dart';
-import 'package:codeforces_assistant/screens/drawer_fragments/CodeforcesUserContestHistoryFragment.dart';
+import 'package:codeforces_assistant/screens/drawer_fragments/codeforces/ContestHistoryFragment.dart';
 import 'package:codeforces_assistant/services/CodeforcesAPIService.dart';
 import 'package:codeforces_assistant/utils/SizeUtil.dart';
 import 'package:codeforces_assistant/utils/dialogs.dart';
@@ -7,14 +7,13 @@ import 'package:codeforces_assistant/widgets/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CodeforcesUserInfoFragment extends StatefulWidget {
+class CodeforcesProfileFragment extends StatefulWidget {
   @override
-  _CodeforcesUserInfoFragmentState createState() =>
-      _CodeforcesUserInfoFragmentState();
+  _CodeforcesProfileFragmentState createState() =>
+      _CodeforcesProfileFragmentState();
 }
 
-class _CodeforcesUserInfoFragmentState
-    extends State<CodeforcesUserInfoFragment> {
+class _CodeforcesProfileFragmentState extends State<CodeforcesProfileFragment> {
   bool _dataIsReady = false;
   User user;
   double widthPiece, heightPiece;
@@ -180,7 +179,7 @@ class _CodeforcesUserInfoFragmentState
                     await CodeforcesAPIService.getContestHistory(
                         userId: handle);
                 Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => CodeforcesUserContestHistoryFragment(
+                  builder: (context) => ContestHistoryFragment(
                     ratingChanges: ratingChanges,
                   ),
                 ));

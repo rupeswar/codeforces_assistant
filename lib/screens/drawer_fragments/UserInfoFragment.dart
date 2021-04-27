@@ -24,7 +24,7 @@ class UserInfoFragment extends StatelessWidget {
         ),
         child: Center(
           child: DefaultTextStyle(
-            style: TextStyle(fontSize: size.size(30)),
+            style: TextStyle(fontSize: size.size(30), color: Colors.black),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

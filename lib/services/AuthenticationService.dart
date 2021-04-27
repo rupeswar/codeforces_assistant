@@ -1,9 +1,10 @@
-import 'dart:html';
-
 import 'package:codeforces_assistant/utils/Dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:codeforces_assistant/wrappers/html/html_stub.dart'
+    if (dart.library.js) 'package:codeforces_assistant/wrappers/html/html_web.dart';
 
 class AuthenticationService {
   String verificationId;

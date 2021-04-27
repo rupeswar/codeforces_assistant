@@ -1,5 +1,6 @@
 import 'package:codeforces_assistant/screens/SettingsScreen.dart';
-import 'package:codeforces_assistant/screens/drawer_fragments/CodeforcesUserInfoFragment.dart';
+import 'package:codeforces_assistant/screens/drawer_fragments/codeforces/ContestsFragment.dart';
+import 'package:codeforces_assistant/screens/drawer_fragments/codeforces/CodeforcesProfileFragment.dart';
 import 'package:codeforces_assistant/screens/drawer_fragments/UserInfoFragment.dart';
 import 'package:codeforces_assistant/utils/DrawerFragmentNotifier.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,13 +52,36 @@ class HomeScreen extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                 ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Text(
+                    'CODEFORCES',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ),
                 ListTile(
-                  title: Text('Codeforces'),
+                  title: Text('Profile'),
                   onTap: () {
                     drawerState.setState(DrawerState.CodeforcesUserInfo);
                     Navigator.of(context).pop();
                   },
                 ),
+                ListTile(
+                  title: Text('Contests'),
+                  onTap: () {
+                    drawerState.setState(DrawerState.Contests);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Divider(),
                 ListTile(
                   title: Text('Loading'),
                   onTap: () {
@@ -86,7 +110,9 @@ class HomeScreen extends StatelessWidget {
       case DrawerState.UserInfo:
         return UserInfoFragment();
       case DrawerState.CodeforcesUserInfo:
-        return CodeforcesUserInfoFragment();
+        return CodeforcesProfileFragment();
+      case DrawerState.Contests:
+        return ContestsFragment();
       default:
         return Center(
           child: CircularProgressIndicator(),
@@ -100,10 +126,12 @@ String getTitle(DrawerState drawerState) {
     case DrawerState.UserInfo:
       return 'Home';
     case DrawerState.CodeforcesUserInfo:
-      return 'Codeforces';
+      return 'Codeforces Profile';
+    case DrawerState.Contests:
+      return 'Contests';
     default:
       return 'Loading';
   }
 }
 
-enum DrawerState { UserInfo, CodeforcesUserInfo, Other }
+enum DrawerState { UserInfo, CodeforcesUserInfo, Contests, Other }
