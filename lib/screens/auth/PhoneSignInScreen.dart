@@ -1,4 +1,5 @@
 import 'package:codeforces_assistant/services/AuthenticationService.dart';
+import 'package:codeforces_assistant/services/FirestoreService.dart';
 import 'package:codeforces_assistant/utils/SizeUtil.dart';
 import 'package:codeforces_assistant/utils/UserDataNotifier.dart';
 import 'package:codeforces_assistant/widgets/custom_button.dart';
@@ -91,6 +92,88 @@ class PhoneSignInPhoneNumberScreen extends StatelessWidget {
   }
 }
 
+class PhoneSignInUserNameScreen extends StatelessWidget {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AuthenticationService _authenticationService = AuthenticationService();
+
+  String phoneNo, userName;
+  bool isWeb = kIsWeb;
+
+  @override
+  Widget build(BuildContext context) {
+    var widthPiece = MediaQuery.of(context).size.width;
+    var heightPiece = MediaQuery.of(context).size.height;
+    var size = SizeUtil(heightPiece, widthPiece);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Sign In With Username and OTP',
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: size.widthPercent(10),
+        ),
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomTextField(
+                  hintText: 'Enter Username',
+                  style: TextStyle(
+                    fontSize: size.size(30),
+                    height: 1.5,
+                  ),
+                  inputType: TextInputType.visiblePassword,
+                  onSaved: (value) {
+                    print(value);
+                    userName = value;
+                  },
+                ),
+                SizedBox(height: size.size(20)),
+                CustomButton(
+                  child: Text(
+                    'Send OTP',
+                    style: TextStyle(
+                      fontSize: size.size(30),
+                      fontWeight: FontWeight.normal,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () async {
+                    _formKey.currentState.save();
+                    print('Username is $userName');
+                    if (userName == null) return;
+                    phoneNo = await FirestoreService.getPhoneNumberByUserName(
+                        userName);
+                    if (true) {
+                      if (isWeb)
+                        await _authenticationService.webInitiatePhoneSignIn(
+                            context, phoneNo);
+                      else
+                        await _authenticationService.nativeVerifyPhone(
+                            context, phoneNo);
+                      Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) => PhoneSignInOTPScreen(
+                          phoneNo: phoneNo,
+                          authenticationService: _authenticationService,
+                        ),
+                      ));
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class PhoneSignInOTPScreen extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AuthenticationService authenticationService;
@@ -148,6 +231,7 @@ class PhoneSignInOTPScreen extends StatelessWidget {
                   ),
                   maxLength: 6,
                   inputType: TextInputType.number,
+                  obscureText: true,
                   onSaved: (otp) => _otp = otp,
                   validator: (value) {
                     if (value.length != 6)

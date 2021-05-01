@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codeforces_assistant/models/User.dart';
 import 'package:codeforces_assistant/screens/drawer_fragments/codeforces/ContestHistoryFragment.dart';
 import 'package:codeforces_assistant/services/CodeforcesAPIService.dart';
+import 'package:codeforces_assistant/services/FirestoreService.dart';
 import 'package:codeforces_assistant/utils/SizeUtil.dart';
+import 'package:codeforces_assistant/utils/UserDataNotifier.dart';
 import 'package:codeforces_assistant/utils/dialogs.dart';
 import 'package:codeforces_assistant/widgets/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CodeforcesProfileFragment extends StatefulWidget {
   @override
@@ -18,15 +22,17 @@ class _CodeforcesProfileFragmentState extends State<CodeforcesProfileFragment> {
   User user;
   double widthPiece, heightPiece;
   SizeUtil size;
-  String handle = 'tourist';
+  String handle;
+  UserDataNotifier _userDataNotifier;
 
   @override
   Widget build(BuildContext context) {
     widthPiece = MediaQuery.of(context).size.width;
     heightPiece = MediaQuery.of(context).size.height;
     size = SizeUtil(heightPiece, widthPiece);
+    _userDataNotifier = Provider.of<UserDataNotifier>(context);
 
-    if (!_dataIsReady) getUser(handle);
+    if (!_dataIsReady) getUser();
 
     return Center(
       child: _dataIsReady ? buildUserWidget() : CircularProgressIndicator(),
@@ -197,8 +203,10 @@ class _CodeforcesProfileFragmentState extends State<CodeforcesProfileFragment> {
     );
   }
 
-  Future<void> getUser(String handle) async {
-    user = await CodeforcesAPIService.getUser(userId: handle);
+  Future<void> getUser() async {
+    handle ??= _userDataNotifier.handle;
+    user = await CodeforcesAPIService.getUser(userId: handle ?? 'tourist');
+    handle = null;
 
     if (user == null) {
       ScaffoldMessenger.of(context)

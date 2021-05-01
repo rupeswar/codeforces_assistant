@@ -35,13 +35,13 @@ class UserInfoFragment extends StatelessWidget {
                   height: size.size(10),
                 ),
                 Text(
-                  'Your registered number is: ${currentUser.phoneNumber}',
+                  'Your registered number is: ${currentUser.phoneNumber ?? 'Not Set'}',
                 ),
                 SizedBox(
                   height: size.size(10),
                 ),
                 Text(
-                  'Your registered email is : ${currentUser.email}',
+                  'Your registered email is : ${currentUser.email ?? 'Not Set'}',
                 ),
                 SizedBox(
                   height: size.size(10),
@@ -53,7 +53,13 @@ class UserInfoFragment extends StatelessWidget {
                   height: size.size(10),
                 ),
                 Text(
-                  'Display Name : ${currentUser.displayName}',
+                  'Display Name : ${currentUser.displayName ?? 'Not Set'}',
+                ),
+                SizedBox(
+                  height: size.size(10),
+                ),
+                Text(
+                  'Username : ${userDataNotifier.userName ?? 'Not Set'}',
                 ),
                 SizedBox(
                   height: size.size(10),

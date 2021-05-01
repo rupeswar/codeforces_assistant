@@ -1,3 +1,4 @@
+import 'package:codeforces_assistant/services/FirestoreService.dart';
 import 'package:codeforces_assistant/utils/Dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -177,6 +178,11 @@ class AuthenticationService {
     await auth.currentUser.linkWithCredential(credential);
     await auth.currentUser.sendEmailVerification();
 
+    Navigator.of(context).pop();
+  }
+
+  Future<void> setUserName({String userName, BuildContext context}) async {
+    await FirestoreService.createUser(userName, context);
     Navigator.of(context).pop();
   }
 }

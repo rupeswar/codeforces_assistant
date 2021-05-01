@@ -81,7 +81,39 @@ class SignInScreen extends StatelessWidget {
               builder: (context) => EmailSignUpScreen(),
             ));
           },
-        )
+        ),
+        SizedBox(height: size.size(20)),
+        CustomButton(
+          child: Text(
+            'Sign In With Username and OTP',
+            style: TextStyle(
+              fontSize: size.size(30),
+              fontWeight: FontWeight.normal,
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).push(CupertinoPageRoute(
+              builder: (context) => PhoneSignInUserNameScreen(),
+            ));
+          },
+        ),
+        SizedBox(height: size.size(20)),
+        CustomButton(
+          child: Text(
+            'Sign In With Username and Password',
+            style: TextStyle(
+              fontSize: size.size(30),
+              fontWeight: FontWeight.normal,
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).push(CupertinoPageRoute(
+              builder: (context) => EmailSignInWithUserNameScreen(),
+            ));
+          },
+        ),
       ],
     );
   }
